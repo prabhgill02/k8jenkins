@@ -5,3 +5,20 @@
     pip:
       name: kubernetes
       state: absent
+  - name: Delete Jenkins services
+    command: kubectl delete svc jenkins jenkins-jnlp -n jenkins --ignore-not-found=true
+
+  - name: Delete Jenkins deployment
+    command: kubectl delete deployment jenkins -n jenkins --ignore-not-found=true
+
+  - name: Delete orphaned pods (if any)
+    command: kubectl delete pods -n jenkins --selector=app=jenkins --ignore-not-found=true
+
+  - name: Delete persistent volume claims (if using a PVC)
+    command: kubectl delete pvc -n jenkins --selector=app=jenkins --ignore-not-found=true
+
+  - name: Delete any remaining persistent volumes (if applicable)
+    command: kubectl delete pv -n jenkins --selector=app=jenkins --ignore-not-found=true
+
+  - name: Delete the jenkins namespace (optional, only if you want to remove the namespace too)
+    command: kubectl delete namespace jenkins --ignore-not-found=true      
