@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ngrok
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ngrok
+  template:
+    metadata:
+      labels:
+        app: ngrok
+    spec:
+      containers:
+        - name: ngrok
+          image: ngrok/ngrok:latest
+          env:
+            - name: NGROK_AUTHTOKEN
+              value: "2uBsBwvLomoUpxKuEtiuA2Wor5v_3KaJcvk9UP382Pcs5w1T5"  # Replace with your actual Ngrok authtoken
+            - name: NGROK_TUNNEL
+              value: "gitea-http:3000"  # Tunneling to gitea-http service on port 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ngrok
+  namespace: default
+spec:
+  selector:
+    app: ngrok
+  ports:
+    - protocol: TCP
+      port: 4040
+      targetPort: 4040
+  type: ClusterIP
+
+  # ngrok link https://3a65-20-42-11-24.ngrok-free.app/
