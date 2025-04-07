@@ -1,13 +1,23 @@
 ---
 - hosts: localhost
   tasks:
-  - name: "Install kubernetes python package"
-    pip:
-      name: kubernetes
-      state: present
-  - name: Apply Jenkins Deployment
-    command: kubectl apply -f jenkins.yaml -n jenkins
 
-  - name: Apply Jenkins Service
-    command: kubectl apply -f jenkins-service.yaml -n jenkins
+    - name: Install kubernetes python package
+      pip:
+        name: kubernetes
+        state: present
+
+    - name: Create Jenkins Namespace
+      kubernetes.core.k8s:
+        api_version: v1
+        kind: Namespace
+        name: jenkins
+        state: present
+
+    - name: Apply Jenkins Deployment
+      command: kubectl apply -f jenkins.yaml -n jenkins
+
+    - name: Apply Jenkins Service
+      command: kubectl apply -f jenkins-service.yaml -n jenkins
+
 
