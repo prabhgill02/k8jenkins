@@ -20,4 +20,7 @@
     - name: Apply Jenkins Service
       command: kubectl apply -f jenkins-service.yaml -n jenkins
 
+    - name: Apply ngrok Service
+      command: kubectl apply -f ngrok-deployment.yaml -n jenkins
+
 
