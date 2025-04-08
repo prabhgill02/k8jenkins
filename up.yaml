@@ -7,6 +7,24 @@
         name: kubernetes
         state: present
 
+    - name: Add Gitea Helm chart repository
+      kubernetes.core.helm_repository:
+        name: gitea-charts
+        repo_url: "https://dl.gitea.com/charts/"        
+
+    - name: Install MySQL
+      kubernetes.core.k8s:
+        state: present
+        src: mysql.yaml
+
+    - name: Deploy Gitea using Helm and MySQL
+      kubernetes.core.helm:
+        name: gitea
+        chart_ref: gitea-charts/gitea
+        release_namespace: default
+        values_files:
+          - values.yaml        
+
     - name: Create Jenkins Namespace
       kubernetes.core.k8s:
         api_version: v1
@@ -22,5 +40,8 @@
 
     - name: Apply ngrok Service
       command: kubectl apply -f ngrok-deployment.yaml -n jenkins
+
+    - name: Apply ngrok Service
+      command: kubectl apply -f ngrok-deployment-gitea.yaml -n default      
 
 

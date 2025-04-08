@@ -1,0 +1,33 @@
+redis-cluster:
+  enabled: false
+redis:
+  enabled: false
+postgresql:
+  enabled: false
+postgresql-ha:
+  enabled: false
+
+persistence:
+  enabled: false
+
+gitea:
+  config:
+    database:
+      DB_TYPE: mysql
+      HOST: mysql:3306
+      NAME: gitea
+      USER: root
+      PASSWD: Conestoga1234
+    session:
+      PROVIDER: memory
+    cache:
+      ADAPTER: memory
+    queue:
+      TYPE: level
+  service:
+    http:
+      type: ClusterIP  # Set service type to ClusterIP for HTTP
+      port: 3000
+      clusterIP:
+
+       
